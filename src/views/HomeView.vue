@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import Chart from 'chart.js/auto'
 
-const data = [
+const rawData = ref([
   { year: 2010, count: 10 },
   { year: 2011, count: 20 },
   { year: 2012, count: 15 },
@@ -10,28 +10,34 @@ const data = [
   { year: 2014, count: 22 },
   { year: 2015, count: 30 },
   { year: 2016, count: 28 }
-]
+])
+
+const canvasData = computed(() => {
+  return {
+    labels: rawData.value.map((row) => row.year),
+    datasets: [
+      {
+        label: 'Acquisitions by year',
+        data: rawData.value.map((row) => row.count)
+      }
+    ]
+  }
+})
 
 const elChart = ref<HTMLCanvasElement | null>(null)
 
-function initializeChart(el) {
+function initChart({ el, data }) {
   new Chart(el, {
     type: 'bar',
-    data: {
-      labels: data.map((row) => row.year),
-      datasets: [
-        {
-          label: 'Acquisitions by year',
-          data: data.map((row) => row.count)
-        }
-      ]
-    }
+    data
   })
 }
 
 onMounted(() => {
-  const el = document.getElementById('chart')
-  initializeChart(el)
+  initChart({
+    el: elChart.value,
+    data: canvasData.value
+  })
 })
 </script>
 
