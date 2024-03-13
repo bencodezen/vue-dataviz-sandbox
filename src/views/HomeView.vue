@@ -12,6 +12,7 @@ const rawData = ref([
   { year: 2016, count: 28 }
 ])
 
+// Step 2. Prepare data for the chart
 const canvasData = computed(() => {
   return {
     labels: rawData.value.map((row) => row.year),
@@ -24,6 +25,7 @@ const canvasData = computed(() => {
   }
 })
 
+// Step 1. Select canvas DOM element
 const elChart = ref<HTMLCanvasElement | null>(null)
 
 function initChart({ el, data }) {
@@ -33,6 +35,7 @@ function initChart({ el, data }) {
   })
 }
 
+// Step 3. Initialize the chart when DOM is mounted
 onMounted(() => {
   initChart({
     el: elChart.value,
